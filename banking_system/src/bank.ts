@@ -38,4 +38,17 @@ export class Bank implements BankType {
         this.accounts.push(newAccount);
         return newAccount;
     }
+
+    public deposit(accountNumber: number, amount: number): void {
+        if (amount <= 0) {
+            throw new Error("Deposit amount must be greater than zero.");
+        }
+
+        const account = this.findAccount(accountNumber);
+        if (!account) {
+            throw new Error("Account not found.");
+        }
+
+        account.balance += amount;
+    }
 }
