@@ -4,7 +4,7 @@ export class BankTest {
     private bank: Bank;
 
     constructor() {
-        this.bank = new Bank(['user1', 'user2', 'user3']);
+        this.bank = new Bank(['user1', 'user2', 'user3', 'user4']);
     }
 
     runTests() {
@@ -12,10 +12,11 @@ export class BankTest {
         this.testCreateAccount();
         this.testDepositMoney();
         this.testWithdrawMoney();
+        this.testCheckBalance();
     }
 
     private testCreateAccount() {
-        console.log('Testing Account Creation');
+        console.log('---Testing Account Creation---');
 
         // Scenario 1: Successful account creation
         try {
@@ -48,7 +49,7 @@ export class BankTest {
     }
 
     private testDepositMoney() {
-        console.log('Testing Deposit Money');
+        console.log('---Testing Deposit Money---');
 
         // Create a valid account for testing
         const dupAccount = this.bank.createAccount('user2', 30);
@@ -92,7 +93,7 @@ export class BankTest {
     }
 
     private testWithdrawMoney() {
-        console.log('Testing Withdraw Money');
+        console.log('---Testing Withdraw Money---');
 
         // Create a valid account for testing
         const dupAccount2 = this.bank.createAccount('user3', 22);
@@ -144,6 +145,33 @@ export class BankTest {
         } catch (error) {
             if (error instanceof Error)
             console.log('Scenario 4 - Correctly rejected withdrawal from invalid account:', error.message);
+        }
+    }
+
+    private testCheckBalance() {
+        console.log('---Testing Balance Check---');
+
+        // Create a valid account for testing
+        const dupAccount = this.bank.createAccount('user4', 22);
+        this.bank.deposit(dupAccount.id, 1000);
+        console.log('Initial Account Details Account Id: ',dupAccount.id,' Balance: ',dupAccount.balance);
+        
+        // Scenario 1: Successful balance inquiry
+        try {
+            const balance = this.bank.checkBalance(dupAccount.id);
+            console.log('Scenario 1 - Successfully retrieved balance:', balance);
+        } catch (error) {
+            if (error instanceof Error)
+            console.error('Scenario 1 - Failed to retrieve balance (Scenario 1):', error.message);
+        }
+
+        // Scenario 2: Balance inquiry for an invalid account
+        try {
+            this.bank.checkBalance(9999999999);
+            console.error('Balance inquiry should not be allowed for an invalid account.');
+        } catch (error) {
+            if (error instanceof Error)
+            console.log('Scenario 2 - Correctly rejected balance inquiry for invalid account:', error.message);
         }
     }
 
