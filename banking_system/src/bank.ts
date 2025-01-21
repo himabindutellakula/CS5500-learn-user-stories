@@ -1,21 +1,44 @@
 import { BankType, AccountType } from "./types";
 
+/**
+ * The Bank class implements the BankType interface, 
+ * simulates a simple banking system that allows users to create accounts,
+ * deposit and withdraw funds, and check their account balances.
+ */
 export class Bank implements BankType {
     private accounts: AccountType[] = [];
     private usernames: string[] = [];
 
+    /**
+     * Creates an instance of the Bank class.
+     * @param usernames List of verified usernames allowed to create accounts.
+     */
     public constructor(usernames: string[]) {
         this.usernames = usernames;
     }
 
+    /**
+     * Checks if a given username already exists in the list of usernames.
+     * @param username The username to check for existence.
+     * @returns True if the username exists, otherwise false.
+     */
     private isUsernameExists(username: string): boolean {
         return this.usernames.includes(username);
     }
 
+    /**
+     * Finds an account by its account number.
+     * @param accountNumber The unique account number.
+     * @returns The account if found, otherwise undefined.
+     */
     private findAccount(accountNumber: number): AccountType | undefined {
         return this.accounts.find(account => account.id === accountNumber);
     }
 
+    /**
+     * Generates a unique 10-digit account number.
+     * @returns A unique account number.
+     */
     private generateAccountNumber(): number {
         let accountNumber: number;
         do {
