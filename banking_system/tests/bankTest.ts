@@ -1,5 +1,8 @@
 import { Bank } from '../src/bank';
 
+/**
+ * Test class to test the Bank class methods
+ */
 export class BankTest {
     private bank: Bank;
 
