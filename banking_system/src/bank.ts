@@ -67,4 +67,13 @@ export class Bank implements BankType {
 
         account.balance -= amount;
     }
+
+    public checkBalance(accountNumber: number): number {
+        const account = this.findAccount(accountNumber);
+        if (!account) {
+            throw new Error("Account not found.");
+        }
+
+        return account.balance;
+    }
 }
