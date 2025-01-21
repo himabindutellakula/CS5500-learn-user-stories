@@ -1,5 +1,4 @@
 import { Bank } from '../src/bank';
-import { AccountType } from '../src/types';
 
 export class BankTest {
     private bank: Bank;
@@ -12,6 +11,7 @@ export class BankTest {
         console.log('Running Bank Tests...');
         this.testCreateAccount();
         this.testDepositMoney();
+        this.testWithdrawMoney();
     }
 
     private testCreateAccount() {
@@ -88,6 +88,62 @@ export class BankTest {
             if (error instanceof Error) {
                 console.log('Scenario 3 - Correctly rejected deposit to invalid account:', error.message);
             }
+        }
+    }
+
+    private testWithdrawMoney() {
+        console.log('Testing Withdraw Money');
+
+        // Create a valid account for testing
+        const dupAccount2 = this.bank.createAccount('user3', 22);
+        this.bank.deposit(dupAccount2.id, 1000);
+        console.log('Initial Account Details Account Id: ',dupAccount2.id,' Balance: ',dupAccount2.balance);
+        
+        // Scenario 1: Successful withdrawal
+        try {
+            const newBalance = this.bank.withdraw(dupAccount2.id, 500);
+            console.log('Scenario 1 - Successfully withdrew money. New balance:', dupAccount2.balance);
+        } catch (error) {
+            if (error instanceof Error){
+                console.error('Failed to withdraw money (Scenario 1):', error.message);
+            }
+        }
+
+        // Scenario 2: Withdrawal exceeding available funds
+        try {
+            this.bank.withdraw(dupAccount2.id, 1500);
+            console.error('Withdrawal should not exceed available balance.');
+        } catch (error) {
+            if (error instanceof Error){
+                console.log('Scenario 2 - Correctly rejected withdrawal exceeding balance:', error.message);
+            }
+        }
+
+        // Scenario 3.1: Withdrawal of invalid amount (negative)
+        try {
+            this.bank.withdraw(dupAccount2.id, -100);
+            console.error('Withdrawal should not allow negative amounts.');
+        } catch (error) {
+            if (error instanceof Error)
+            console.log('Scenario 3.1 - Correctly rejected withdrawal of negative amount:', error.message);
+        }
+
+        // Scenario 3.2: Withdrawal of invalid amount (zero)
+        try {
+            this.bank.withdraw(dupAccount2.id, 0);
+            console.error('Withdrawal should not allow negative amounts.');
+        } catch (error) {
+            if (error instanceof Error)
+            console.log('Scenario 3.2 - Correctly rejected withdrawal of zero amount:', error.message);
+        }
+
+        // Scenario 4: Withdrawal from an invalid account
+        try {
+            this.bank.withdraw(9999999999, 100);
+            console.error('Withdrawal should not be allowed from an invalid account.');
+        } catch (error) {
+            if (error instanceof Error)
+            console.log('Scenario 4 - Correctly rejected withdrawal from invalid account:', error.message);
         }
     }
 
